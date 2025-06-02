@@ -11,7 +11,7 @@ from agno.tools.yfinance import YFinanceTools
 web_agent = Agent(
     name="Web Search Agent",
     role="Handle web search requests",
-    model=OpenAIChat(id="gpt-4o-mini"),
+    model=OpenAIChat(id="gemini"),
     tools=[DuckDuckGoTools()],
     instructions="Always include sources.",
     add_datetime_to_instructions=True,
@@ -20,7 +20,7 @@ web_agent = Agent(
 finance_agent = Agent(
     name="Finance Agent",
     role="Handle financial data requests",
-    model=OpenAIChat(id="gpt-4o-mini"),
+    model=OpenAIChat(id="gemini"),
     tools=[
         YFinanceTools(stock_price=True, analyst_recommendations=True, company_info=True)
     ],
@@ -31,7 +31,7 @@ finance_agent = Agent(
 team_leader = Team(
     name="Reasoning Finance Team Leader",
     mode="coordinate",
-    model=Claude(id="claude-3-7-sonnet-latest"),
+    model=Claude(id="gemini"),
     members=[web_agent, finance_agent],
     tools=[ReasoningTools(add_instructions=True)],
     instructions=[
