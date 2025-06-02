@@ -3,10 +3,12 @@ from textwrap import dedent
 from agno.agent import Agent
 from agno.models.anthropic import Claude
 from agno.models.openai import OpenAIChat
+from agno.models.gemini import GeminiFlash
 from agno.team.team import Team
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.reasoning import ReasoningTools
 from agno.tools.yfinance import YFinanceTools
+from agno.tools.filesystem import FileSystemTools
 
 web_agent = Agent(
     name="Web Search Agent",
@@ -28,11 +30,20 @@ finance_agent = Agent(
     add_datetime_to_instructions=True,
 )
 
+filesystem_agent = Agent(
+    name="File System Agent",
+    role="Provide details about the local file system.",
+    model=GeminiFlash(),
+    tools=[FileSystemTools()],
+    instructions="Return the current directory and list files.",
+    add_datetime_to_instructions=True,
+)
+
 team_leader = Team(
     name="Reasoning Finance Team Leader",
     mode="coordinate",
     model=Claude(id="claude-3-7-sonnet-latest"),
-    members=[web_agent, finance_agent],
+    members=[web_agent, finance_agent, filesystem_agent],
     tools=[ReasoningTools(add_instructions=True)],
     instructions=[
         "Use tables to display data.",
